@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { Toaster } from 'sonner';
 
-import { WelcomeScreen } from './components/WelcomeScreen';
+import { VideoIntro } from './components/VideoIntro';
 import { InvitationContent } from './components/InvitationContent';
 import { Admin } from './components/Admin';
 import { INVITATION_IMAGE_URLS, preloadImages } from './utils/preloadImages';
@@ -24,7 +24,7 @@ export default function App() {
 
   let eventLabel = 'Our Wedding Celebration';
 
-  const weddingDate = new Date('2026-10-22T09:15:00');
+  const weddingDate = new Date('2026-12-11T14:30:00+05:30');
 
   useEffect(() => {
     if (isAdminRoute()) return;
@@ -39,7 +39,7 @@ export default function App() {
     const videoLink = document.createElement('link');
     videoLink.rel = 'preload';
     videoLink.as = 'video';
-    videoLink.href = '/intro.mp4';
+    videoLink.href = '/intro-envelope.mp4';
     document.head.appendChild(videoLink);
 
     return () => {
@@ -49,7 +49,7 @@ export default function App() {
 
   const ensureAudio = useCallback(() => {
     if (!audioRef.current) {
-      audioRef.current = new Audio('/Dreams Come True - Dylan Carwyn Romantic Wedding Song 2025 (Lyrics) - Dazzling Tunes (128k).mp3');
+      audioRef.current = new Audio('/in-gods-perfect-time.mp3');
       audioRef.current.loop = true;
       audioRef.current.volume = 0.3;
       audioRef.current.preload = 'none';
@@ -114,7 +114,7 @@ export default function App() {
 
       <AnimatePresence mode="wait">
         {!showInvitation && (
-          <WelcomeScreen
+          <VideoIntro
             key="welcome"
             onComplete={handleEnvelopeComplete}
             onMusicStart={handleMusicStart}
@@ -124,7 +124,7 @@ export default function App() {
       </AnimatePresence>
       
       {/* Hidden video to force preload across all devices */}
-      <video src="/intro.mp4" preload="auto" muted playsInline style={{ display: 'none' }} />
+      <video src="/hero-butterflies.mp4" preload="auto" muted playsInline style={{ display: 'none' }} />
     </>
   );
 }

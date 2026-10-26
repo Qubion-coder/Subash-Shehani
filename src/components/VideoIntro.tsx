@@ -37,7 +37,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
           position: fixed;
           inset: 0;
           z-index: 100;
-          background: #000;
+          background: #f3eef0;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -59,7 +59,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          background: rgba(0, 0, 0, 0.4);
+          background: #fdf9fb url('/bg/lilac-floral-frame-bg.jpeg') center / cover no-repeat;
           color: white;
           cursor: pointer;
           font-family: "Cormorant Garamond", serif;
@@ -68,7 +68,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
         .play-button {
           padding: 16px 32px;
           border: 1px solid rgba(255, 255, 255, 0.6);
-          background: rgba(0, 0, 0, 0.3);
+          background: rgba(138, 106, 156, 0.85);
           color: white;
           font-size: 20px;
           cursor: pointer;
@@ -117,7 +117,9 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
         <video 
           ref={videoRef}
           className="intro-video"
-          src="/intro.mp4"
+          src="/intro-envelope.mp4#t=0.001"
+          poster="/intro-envelope-poster.jpg"
+          preload="auto"
           playsInline
           onEnded={handleVideoEnded}
         />
@@ -129,7 +131,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
               onClick={(e) => { e.stopPropagation(); startVideo(); }}
               disabled={!readyToTransition}
             >
-              {readyToTransition ? "Click to View Invitation" : "Loading..."}
+              {readyToTransition ? "Tap to View Our Special Day" : "Loading..."}
             </button>
           </div>
         )}

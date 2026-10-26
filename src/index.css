@@ -2,14 +2,16 @@
 @import "tailwindcss";
 
 @theme {
-  /* White/Green/Orange Color Palette */
-  --color-brand-plum: #b89645;
-  --color-brand-lavender: #C1D5C0;
-  --color-brand-rose: #FDE6D5;
-  --color-brand-blush: #ffffff;
+  /* Soft Lilac / Dusty Rose / White Palette */
+  --color-brand-plum: #8a6a9c;     /* deep lilac – accent text & icons */
+  --color-brand-lavender: #c8a2c8; /* soft lilac */
+  --color-brand-rose: #e7c3cb;     /* dusty rose pink (light) */
+  --color-brand-dusty: #c48b98;    /* dusty rose pink (deep) */
+  --color-brand-blush: #fdf9fb;    /* white with a whisper of lilac */
 
   --font-serif: "Cormorant Garamond", serif;
   --font-display: "Great Vibes", cursive;
+  --font-script: "Pinyon Script", cursive;
   --font-names: "Cinzel Decorative", serif;
   --font-century: "Century", "Century Schoolbook", serif;
   --font-sans: "Inter", sans-serif;
@@ -18,7 +20,7 @@
 
 :root {
   background-color: var(--color-brand-blush);
-  color: #292524;
+  color: #3f3346;
 }
 
 html, body {

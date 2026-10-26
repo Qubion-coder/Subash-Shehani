@@ -51,18 +51,28 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
         style={useParallax ? { y: y1, scale } : undefined}
       >
         <video
-          src="/intro.mp4"
+          src="/hero-butterflies.mp4"
           className="w-full h-full object-cover"
           style={{ objectPosition: 'center 20%' }}
           autoPlay
           muted
           playsInline
           onEnded={(e) => {
-             // Pauses exactly at the last frame
-             e.currentTarget.pause();
+             // Show the frame and scroll hint, then keep the butterflies flying
              setVideoEnded(true);
+             e.currentTarget.currentTime = 0;
+             e.currentTarget.play().catch(() => {});
           }}
         />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.6, duration: 1.4, ease: 'easeOut' }}
+        className="relative z-20 w-56 sm:w-72 aspect-[3/4] overflow-hidden border-[6px] border-white shadow-[0_25px_60px_rgba(138,106,156,0.35)]"
+      >
+        <img src="/bg/rings.jpeg" alt="Subash & Shehani" className="absolute inset-0 w-full h-full object-cover" />
       </motion.div>
 
 
@@ -75,7 +85,7 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
             transition={{ duration: 1 }}
             className="absolute inset-0 z-10 pointer-events-none"
           >
-            <div className="absolute inset-5 sm:inset-8 border border-brand-plum/30 rounded-3xl shadow-[inset_0_0_30px_rgba(201,169,110,0.1)]" />
+            <div className="absolute inset-5 sm:inset-8 border border-brand-plum/30 rounded-3xl shadow-[inset_0_0_30px_rgba(200,162,200,0.1)]" />
             <div className="absolute inset-6 sm:inset-9 border border-brand-plum/15 rounded-[1.3rem]" />
           </motion.div>
         )}

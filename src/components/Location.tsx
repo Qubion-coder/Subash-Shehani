@@ -10,12 +10,21 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
   const venues = [
     {
       id: 'ceremony',
-      name: "Cinnamon Grand",
-      city: "Colombo",
+      name: "St. Anthony's Cathedral",
+      city: "Kandy",
       quote: `"A beautiful and sacred place where we will unite."`,
-      liveLocationUrl: "https://maps.app.goo.gl/7wcd6uLHpY8HevN66?g_st=ic",
-      imageUrl: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/543025919.jpg?k=fae14e26f4bbf1737e8d67a49cf188efe1699914cdbc808a59fdeccad1080eb3&o=",
-      label: "The Ceremony"
+      liveLocationUrl: "https://www.google.com/maps/search/?api=1&query=St.+Anthony's+Cathedral+Kandy",
+      mapEmbedUrl: "https://www.google.com/maps?q=St.+Anthony's+Cathedral+Kandy&output=embed",
+      label: "The Church Mass"
+    },
+    {
+      id: 'reception',
+      name: "Royal Rest House",
+      city: "Peradeniya, Kandy",
+      quote: `"Where we will celebrate the beginning of our forever."`,
+      liveLocationUrl: "https://www.google.com/maps/search/?api=1&query=Royal+Rest+House+Peradeniya",
+      mapEmbedUrl: "https://www.google.com/maps?q=Royal+Rest+House+Peradeniya&output=embed",
+      label: "The Reception"
     }
   ];
 
@@ -38,7 +47,7 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
                 transition={{ duration: 1.2, ease: "easeOut" }}
                 className={`w-full lg:w-[45%] flex z-20 ${isReversed ? 'lg:-translate-x-12' : 'lg:translate-x-12'}`}
               >
-                <div className="w-full h-full bg-white/90 backdrop-blur-2xl p-10 sm:p-14 lg:p-16 rounded-[2.5rem] shadow-[0_30px_60px_rgba(176,137,104,0.15)] border border-brand-lavender/30 relative overflow-hidden group flex flex-col justify-center">
+                <div className="w-full h-full bg-white/90 backdrop-blur-2xl p-10 sm:p-14 lg:p-16 rounded-[2.5rem] shadow-[0_30px_60px_rgba(138,106,156,0.15)] border border-brand-lavender/30 relative overflow-hidden group flex flex-col justify-center">
                   
                   {/* Elegant top border gradient */}
                   <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-rose via-brand-lavender to-brand-plum" />
@@ -74,7 +83,7 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
                           href={venue.liveLocationUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-3 bg-stone-800 text-brand-rose px-8 py-4 rounded-full font-sans tracking-[0.2em] text-xs uppercase hover:bg-stone-900 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all duration-300 active:scale-95 group/btn"
+                          className="inline-flex items-center gap-3 bg-brand-plum text-white px-8 py-4 rounded-full font-sans tracking-[0.2em] text-xs uppercase hover:bg-[#765889] hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all duration-300 active:scale-95 group/btn"
                         >
                           <Navigation className="w-4 h-4 text-brand-plum group-hover/btn:rotate-45 transition-transform duration-300" />
                           Open Live Location
@@ -102,10 +111,12 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
                   {/* Image Placeholder Masking for premium feel */}
                   <div className="absolute inset-0 bg-brand-lavender/10 mix-blend-multiply pointer-events-none z-20 group-hover/map:opacity-0 transition-opacity duration-1000" />
                   
-                  <img
-                    src={venue.imageUrl}
-                    alt={`${venue.name} Location`}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-in-out group-hover/map:scale-105"
+                  <iframe
+                    src={venue.mapEmbedUrl}
+                    title={`${venue.name} Location`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0 w-full h-full border-0"
                   />
 
                   {/* Decorative Location Pin Overlay */}

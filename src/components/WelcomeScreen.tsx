@@ -26,7 +26,7 @@ export function WelcomeScreen({ onComplete, onMusicStart, readyToTransition = tr
           position: fixed;
           inset: 0;
           z-index: 100;
-          background: #000;
+          background: #fdf9fb url('/bg/lilac-floral-frame-bg.jpeg') center / cover no-repeat;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -39,7 +39,7 @@ export function WelcomeScreen({ onComplete, onMusicStart, readyToTransition = tr
         .play-button {
           padding: 16px 32px;
           border: 1px solid rgba(255, 255, 255, 0.6);
-          background: rgba(0, 0, 0, 0.3);
+          background: rgba(138, 106, 156, 0.85);
           color: white;
           font-size: 20px;
           cursor: pointer;
@@ -63,7 +63,7 @@ export function WelcomeScreen({ onComplete, onMusicStart, readyToTransition = tr
           onClick={startEntry}
           disabled={!readyToTransition}
         >
-          {readyToTransition ? "Click to View Invitation" : "Loading..."}
+          {readyToTransition ? "Tap to View Our Special Day" : "Loading..."}
         </button>
       </div>
     </>

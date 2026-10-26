@@ -20,7 +20,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
     thoughts: '',
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbxyOLqbPCF84tUg299jIyA0GuebtYFra-3C-CXxzE851QIQkOs1RRrqBKyYqP6NCSO-/exec";
+  const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL as string;
 
   useEffect(() => {
     if (inviteeName) {
@@ -68,7 +68,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="glass p-6 sm:p-10 lg:p-12 rounded-[2.5rem] sm:rounded-[3rem] border border-white/40 shadow-[0_30px_60px_rgba(176,137,104,0.1)] relative overflow-hidden bg-white/60 backdrop-blur-3xl lg:flex items-center gap-10 lg:gap-16"
+        className="glass p-6 sm:p-10 lg:p-12 rounded-[2.5rem] sm:rounded-[3rem] border border-white/40 shadow-[0_30px_60px_rgba(138,106,156,0.1)] relative overflow-hidden bg-white/60 backdrop-blur-3xl lg:flex items-center gap-10 lg:gap-16"
       >
         {/* Soft top border line */}
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-rose via-brand-plum/80 to-brand-rose" />
@@ -197,7 +197,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
                   <button
                     disabled={status === 'loading'}
                     type="submit"
-                    className="w-full bg-stone-800 text-brand-rose py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:bg-stone-900 transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
+                    className="w-full bg-brand-plum text-white py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:bg-[#765889] transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
                   >
                     {status === 'loading' ? (
                       <Loader2 className="w-5 h-5 animate-spin" />

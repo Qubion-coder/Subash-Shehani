@@ -22,4 +22,9 @@ export const INVITATION_IMAGE_URLS = [
   '/IMG_6942.JPG.jpeg',
   '/IMG_6945.JPG.jpeg',
   '/ivory_satin_bow-removebg-preview.png',
+  '/bg/couple-bg.jpeg',
+  '/bg/rings.jpeg',
+  '/intro-envelope-poster.jpg',
+  '/bg/lilac-leaves-bg.jpeg',
+  '/bg/lilac-floral-frame-bg.jpeg',
 ] as const;
