@@ -77,6 +77,8 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
         <div className="lg:w-1/2 lg:pr-6 mb-8 lg:mb-0 relative text-center lg:text-left">
           <Sparkles className="absolute -top-6 -left-6 w-12 h-12 text-brand-lavender/30 animate-pulse" />
 
+          <p className="font-display text-3xl sm:text-4xl text-brand-plum mb-1">RSVP</p>
+
           <div className="inline-flex items-center justify-center lg:justify-start gap-4 mb-4">
             <span className="text-brand-plum uppercase tracking-[0.5em] text-[10px] sm:text-[11px] font-bold drop-shadow-sm">
               Kindly Respond
@@ -85,13 +87,13 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display text-stone-800 tracking-tight leading-[1.1] mb-4 drop-shadow-sm">
-            Reserve <span className="italic font-light text-brand-plum">Your</span> Seat
+            We Would Be <span className="italic font-light text-brand-plum">Delighted</span> to Have You
           </h2>
 
           <p className="text-stone-500/90 font-serif text-base sm:text-lg leading-relaxed mb-6">
             {inviteeName
-              ? `Dear ${inviteeName}, your presence at ${eventName} means the world to us. Please kindly let us know if you will be able to join our celebration.`
-              : `Your presence means the world to us. Please kindly let us know if you will be able to join our celebration.`
+              ? `Dear ${inviteeName}, your presence would mean so much to us as we celebrate this special day. Kindly let us know if you will be able to join us.`
+              : `Your presence would mean so much to us as we celebrate this special day. Kindly let us know if you will be able to join us.`
             }
           </p>
 

@@ -34,9 +34,23 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
                 <>A Celebration of <br /><span className="italic font-light text-brand-plum">Tradition & Love</span></>
             </h2>
 
-            <p className="text-stone-500/90 font-serif text-lg sm:text-xl leading-relaxed mb-16 max-w-lg">
-                We are honored to invite you to witness the beginning of our forever as we exchange vows, surrounded by the warmth and love of our cherished family and friends.
-            </p>
+            <blockquote className="max-w-lg mb-8 pl-5 border-l-[1.5px] border-brand-lavender/60">
+              <p className="font-serif italic text-xl sm:text-2xl text-brand-plum leading-relaxed">
+                "Therefore what God has joined together, let no one separate."
+              </p>
+              <cite className="block not-italic mt-2 text-[11px] uppercase tracking-[0.3em] font-semibold text-stone-500">
+                Matthew 19:6
+              </cite>
+            </blockquote>
+
+            <div className="space-y-5 text-stone-600 font-serif text-lg sm:text-xl leading-relaxed mb-16 max-w-lg">
+              <p>
+                With God's blessings and hearts filled with love, we cordially invite you to witness the sacred union of our lives as we exchange our wedding vows.
+              </p>
+              <p>
+                Your presence and prayers will make our special day truly meaningful as we begin our forever together.
+              </p>
+            </div>
 
             {/* Premium Timeline */}
             <div className="relative space-y-12 ml-10 sm:ml-12 border-l-[1.5px] border-brand-lavender/30 pl-10 sm:pl-12 py-4">

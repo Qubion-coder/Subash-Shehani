@@ -12,19 +12,23 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
       id: 'ceremony',
       name: "St. Anthony's Cathedral",
       city: "Kandy",
-      quote: `"A beautiful and sacred place where we will unite."`,
+      quote: `"Two hearts, one promise, a lifetime blessed by God."`,
       liveLocationUrl: "https://www.google.com/maps/search/?api=1&query=St.+Anthony's+Cathedral+Kandy",
       mapEmbedUrl: "https://www.google.com/maps?q=St.+Anthony's+Cathedral+Kandy&output=embed",
-      label: "The Church Mass"
+      label: "The Holy Matrimony",
+      heading: "Our Promise",
+      headingAccent: "Before God"
     },
     {
       id: 'reception',
       name: "Royal Rest House",
       city: "Peradeniya, Kandy",
-      quote: `"Where we will celebrate the beginning of our forever."`,
+      quote: `"Join us as we begin our beautiful journey of togetherness."`,
       liveLocationUrl: "https://www.google.com/maps/search/?api=1&query=Royal+Rest+House+Peradeniya",
       mapEmbedUrl: "https://www.google.com/maps?q=Royal+Rest+House+Peradeniya&output=embed",
-      label: "The Reception"
+      label: "The Reception",
+      heading: "Our Beginning,",
+      headingAccent: "Our Forever"
     }
   ];
 
@@ -61,8 +65,8 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
                     </div>
 
                     <h2 className="text-5xl sm:text-6xl font-display text-stone-800 mb-6 leading-tight drop-shadow-sm">
-                      Where We <br />
-                      <span className="italic font-light text-brand-plum">Celebrate</span>
+                      {venue.heading} <br />
+                      <span className="italic font-light text-brand-plum">{venue.headingAccent}</span>
                     </h2>
 
                     <motion.div 

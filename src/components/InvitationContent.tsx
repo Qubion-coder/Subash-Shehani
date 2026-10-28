@@ -6,6 +6,7 @@ import { CeremonyDetails } from './CeremonyDetails';
 import { Location } from './Location';
 import { Countdown } from './Countdown';
 import { RSVPForm } from './RSVPForm';
+import { GratitudeNote } from './GratitudeNote';
 
 import { InviteeBanner } from './InviteeBanner';
 import { DeferredMount } from './DeferredMount';
@@ -93,6 +94,15 @@ export function InvitationContent({
           <div className="relative z-10">
             <Countdown targetDate={weddingDate} />
           </div>
+        </div>
+      </DeferredMount>
+
+      <DeferredMount active={active} delay={400} minHeight="30vh">
+        <div
+          className="py-24 sm:py-32 bg-brand-blush bg-cover bg-center relative overflow-hidden"
+          style={{ backgroundImage: "url('/bg/gratitude-bg.jpeg')" }}
+        >
+          <GratitudeNote />
         </div>
       </DeferredMount>
 

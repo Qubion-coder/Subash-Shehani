@@ -66,14 +66,36 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6, duration: 1.4, ease: 'easeOut' }}
-        className="relative z-20 w-56 sm:w-72 aspect-[3/4] overflow-hidden border-[6px] border-white shadow-[0_25px_60px_rgba(138,106,156,0.35)]"
-      >
-        <img src="/bg/rings.jpeg" alt="Subash & Shehani" className="absolute inset-0 w-full h-full object-cover" />
-      </motion.div>
+      <div className="relative z-20 text-center px-10 py-6">
+        {/* Soft white glow so the gold names stand out over the butterflies */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 1.2 }}
+          className="absolute -inset-x-8 -inset-y-4 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.7)_45%,rgba(255,255,255,0)_72%)] pointer-events-none"
+        />
+        <h1 className="relative font-display text-7xl sm:text-8xl lg:text-9xl leading-[1.15] [filter:drop-shadow(0_1px_0_rgba(120,80,10,0.9))_drop-shadow(0_3px_6px_rgba(74,58,85,0.45))]">
+          {[
+            { word: 'Subash', start: 0.5 },
+            { word: '&', start: 1.4 },
+            { word: 'Shehani', start: 1.8 },
+          ].map(({ word, start }) => (
+            <span key={word} className={`block ${word === '&' ? 'text-5xl sm:text-6xl my-1' : ''}`}>
+              {word.split('').map((char, i) => (
+                <motion.span
+                  key={i}
+                  className="inline-block px-[0.2em] -mx-[0.2em] py-[0.35em] -my-[0.35em] bg-[linear-gradient(180deg,#f6e27a_0%,#d4af37_40%,#a67c1a_70%,#e8c860_100%)] bg-clip-text text-transparent"
+                  initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ delay: start + i * 0.09, duration: 0.7, ease: 'easeOut' }}
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </span>
+          ))}
+        </h1>
+      </div>
 
 
 

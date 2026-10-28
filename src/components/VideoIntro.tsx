@@ -59,7 +59,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          background: #fdf9fb url('/bg/lilac-floral-frame-bg.jpeg') center / cover no-repeat;
+          background: #fdf9fb url('/bg/tap-page-bg.jpeg') center / cover no-repeat;
           color: white;
           cursor: pointer;
           font-family: "Cormorant Garamond", serif;
