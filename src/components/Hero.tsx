@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
+import { CoupleNames } from './CoupleNames';
+import { useNamesOwner } from '../utils/namesHandoff';
 
 interface HeroProps {
   event?: string | null;
@@ -43,6 +45,7 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   const [videoEnded, setVideoEnded] = useState(false);
+  const namesOwner = useNamesOwner();
 
   return (
     <div ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blush/30">
@@ -67,35 +70,8 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
         />
       </motion.div>
 
-      <div className="relative z-20 text-center px-10 py-6">
-        {/* Soft white glow so the gold names stand out over the butterflies */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 1.2 }}
-          className="absolute -inset-x-8 -inset-y-4 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.7)_45%,rgba(255,255,255,0)_72%)] pointer-events-none"
-        />
-        <h1 className="relative font-display text-7xl sm:text-8xl lg:text-9xl leading-[1.15] [filter:drop-shadow(0_1px_0_rgba(120,80,10,0.9))_drop-shadow(0_3px_6px_rgba(74,58,85,0.45))]">
-          {[
-            { word: 'Subash', start: 0.5 },
-            { word: '&', start: 1.4 },
-            { word: 'Shehani', start: 1.8 },
-          ].map(({ word, start }) => (
-            <span key={word} className={`block ${word === '&' ? 'text-5xl sm:text-6xl my-1' : ''}`}>
-              {word.split('').map((char, i) => (
-                <motion.span
-                  key={i}
-                  className="inline-block px-[0.2em] -mx-[0.2em] py-[0.35em] -my-[0.35em] bg-[linear-gradient(180deg,#f6e27a_0%,#d4af37_40%,#a67c1a_70%,#e8c860_100%)] bg-clip-text text-transparent"
-                  initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  transition={{ delay: start + i * 0.09, duration: 0.7, ease: 'easeOut' }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </span>
-          ))}
-        </h1>
+      <div style={{ opacity: namesOwner === 'intro' ? 0 : 1 }}>
+        <CoupleNames animate={namesOwner === 'idle'} />
       </div>
 
 

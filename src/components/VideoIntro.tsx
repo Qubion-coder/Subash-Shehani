@@ -1,4 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { CoupleNames, NAMES_ANIMATION_MS } from './CoupleNames';
+import { setNamesOwner } from '../utils/namesHandoff';
+
+// Start the gold names this many seconds before the intro video ends
+const NAMES_LEAD_SECONDS = 2;
 
 interface VideoIntroProps {
   onComplete: () => void;
@@ -24,6 +29,15 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
   };
 
   const [ended, setEnded] = useState(false);
+  const [namesStartedAt, setNamesStartedAt] = useState<number | null>(null);
+
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const v = e.currentTarget;
+    if (namesStartedAt === null && !ended && v.duration && v.duration - v.currentTime <= NAMES_LEAD_SECONDS) {
+      setNamesStartedAt(performance.now());
+      setNamesOwner('intro');
+    }
+  };
 
   const handleVideoEnded = () => {
     if (ended) return;
@@ -48,10 +62,15 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
   }, [ended]);
 
   useEffect(() => {
-    if (!exiting || !onExited) return;
-    const t = setTimeout(onExited, 800); // Wait for fade out
+    if (!exiting) return;
+    // Wait for the fade out and for the names to finish, then hand them to the hero
+    const namesLeft = namesStartedAt === null ? 0 : namesStartedAt + NAMES_ANIMATION_MS - performance.now();
+    const t = setTimeout(() => {
+      if (namesStartedAt !== null) setNamesOwner('handedOff');
+      onExited?.();
+    }, Math.max(800, namesLeft));
     return () => clearTimeout(t);
-  }, [exiting, onExited]);
+  }, [exiting, onExited, namesStartedAt]);
 
   return (
     <>
@@ -64,16 +83,19 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: opacity 0.8s ease;
         }
         .video-scene.is-exiting {
-          opacity: 0;
+          background: transparent;
           pointer-events: none;
+        }
+        .video-scene.is-exiting .intro-video {
+          opacity: 0;
         }
         .intro-video {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: opacity 0.8s ease;
         }
         .play-button-overlay {
           position: absolute;
@@ -144,8 +166,16 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
           poster="/intro-envelope-poster.jpg"
           preload="auto"
           playsInline
+          onTimeUpdate={handleTimeUpdate}
           onEnded={handleVideoEnded}
         />
+
+        {namesStartedAt !== null && (
+          // Same box as the hero (top of a full-height screen) so the handoff lines up exactly
+          <div className="absolute top-0 inset-x-0 h-screen flex items-center justify-center pointer-events-none z-[5]">
+            <CoupleNames delay={-0.4} />
+          </div>
+        )}
         
         {!hasStarted && (
           <div className="play-button-overlay" onClick={startVideo}>
