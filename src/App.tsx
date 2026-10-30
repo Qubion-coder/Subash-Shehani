@@ -11,6 +11,7 @@ const isAdminRoute = () => window.location.pathname === '/admin';
 
 export default function App() {
   const [showInvitation, setShowInvitation] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
   const [assetsReady, setAssetsReady] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -89,6 +90,8 @@ export default function App() {
     });
   }, []);
 
+  const handleIntroExited = useCallback(() => setIntroDone(true), []);
+
   if (isAdminRoute()) {
     return (
       <>
@@ -113,10 +116,11 @@ export default function App() {
       />
 
       <AnimatePresence mode="wait">
-        {!showInvitation && (
+        {!introDone && (
           <VideoIntro
             key="welcome"
             onComplete={handleEnvelopeComplete}
+            onExited={handleIntroExited}
             onMusicStart={handleMusicStart}
             readyToTransition={assetsReady}
           />

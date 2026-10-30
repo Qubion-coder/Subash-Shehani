@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface VideoIntroProps {
   onComplete: () => void;
+  onExited?: () => void;
   onMusicStart?: () => void;
   readyToTransition?: boolean;
 }
 
-export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true }: VideoIntroProps) {
+export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransition = true }: VideoIntroProps) {
   const [hasStarted, setHasStarted] = useState(false);
   const [exiting, setExiting] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -22,13 +23,35 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
     }
   };
 
+  const [ended, setEnded] = useState(false);
+
   const handleVideoEnded = () => {
-    setExiting(true);
+    if (ended) return;
+    setEnded(true);
     if (onMusicStart) {
       onMusicStart();
     }
-    setTimeout(() => onComplete(), 500); // Wait for fade out
+    // Mount the invitation underneath while the last intro frame stays on screen
+    onComplete();
   };
+
+  // Crossfade into the hero only once its butterfly video is actually playing
+  useEffect(() => {
+    if (!ended) return;
+    const reveal = () => setExiting(true);
+    window.addEventListener('hero-video-playing', reveal, { once: true });
+    const fallback = setTimeout(reveal, 2500);
+    return () => {
+      window.removeEventListener('hero-video-playing', reveal);
+      clearTimeout(fallback);
+    };
+  }, [ended]);
+
+  useEffect(() => {
+    if (!exiting || !onExited) return;
+    const t = setTimeout(onExited, 800); // Wait for fade out
+    return () => clearTimeout(t);
+  }, [exiting, onExited]);
 
   return (
     <>
@@ -41,7 +64,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: opacity 0.5s ease;
+          transition: opacity 0.8s ease;
         }
         .video-scene.is-exiting {
           opacity: 0;
@@ -136,7 +159,7 @@ export function VideoIntro({ onComplete, onMusicStart, readyToTransition = true 
           </div>
         )}
 
-        {hasStarted && (
+        {hasStarted && !ended && (
           <button className="skip-button" onClick={handleVideoEnded}>
             Skip Intro
           </button>

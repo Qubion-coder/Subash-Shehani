@@ -57,6 +57,7 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
           autoPlay
           muted
           playsInline
+          onPlaying={() => window.dispatchEvent(new Event('hero-video-playing'))}
           onEnded={(e) => {
              // Show the frame and scroll hint, then keep the butterflies flying
              setVideoEnded(true);
