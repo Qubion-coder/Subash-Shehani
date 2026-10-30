@@ -87,7 +87,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display text-stone-800 tracking-tight leading-[1.1] mb-4 drop-shadow-sm">
-            We Would Be <span className="italic font-light text-brand-plum">Delighted</span> to Have You
+            We Would Be <span className="italic font-light text-brand-plum pr-[0.2em]">Delighted</span> to Have You
           </h2>
 
           <p className="text-stone-500/90 font-serif text-base sm:text-lg leading-relaxed mb-6">

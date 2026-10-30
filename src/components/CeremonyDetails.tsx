@@ -53,7 +53,7 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
             </div>
 
             {/* Premium Timeline */}
-            <div className="relative space-y-12 ml-10 sm:ml-12 border-l-[1.5px] border-brand-lavender/30 pl-10 sm:pl-12 py-4">
+            <div className="relative space-y-12 ml-10 sm:ml-12 border-l-[1.5px] border-brand-lavender/30 pl-10 sm:pl-12 py-4 [font-variant-numeric:lining-nums]">
 
               {/* Date */}
               <div className="relative group flex items-center min-h-[48px]">
@@ -62,7 +62,7 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
                 </div>
                 <div>
                   <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 group-hover:text-brand-plum transition-colors duration-500">
-                    Date: Friday, 11th December 2026
+                    Date: Friday, 11<sup className="text-[0.55em] ml-[0.05em] align-super">th</sup> December 2026
                   </h4>
                 </div>
               </div>

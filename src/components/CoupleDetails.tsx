@@ -21,7 +21,7 @@ export const CoupleDetails: React.FC = () => {
             <div className="w-12 sm:w-20 h-[1px] bg-gradient-to-l from-transparent to-brand-plum/60" />
           </div>
           <h2 className="text-5xl sm:text-7xl font-names text-stone-800 tracking-tight drop-shadow-sm">
-            Subash <span className="text-brand-plum font-light mx-2">&</span> S<span className="font-['Cinzel',_serif]">h</span>ehani
+            Subash <span className="text-brand-plum font-light mx-2">&</span> S<span className="mr-[0.08em]">h</span>ehani
           </h2>
         </motion.div>
       </div>
