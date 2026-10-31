@@ -4,8 +4,6 @@ import { setNamesOwner } from '../utils/namesHandoff';
 import { ScrollHint } from './Hero';
 
 // The intro is the envelope opening followed by the butterflies, in one video.
-// The envelope part ends here; the music starts from this point.
-const ENVELOPE_END_SECONDS = 7.5;
 // The gold names start appearing at this point in the intro video
 const NAMES_START_SECONDS = 7;
 // Show the scroll down hint this many seconds before the intro video ends
@@ -28,6 +26,8 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
     
     if (!hasStarted) {
       setHasStarted(true);
+      // Start the song on the tap itself so it plays from the very beginning
+      startMusic();
       if (videoRef.current) {
         videoRef.current.play().catch(console.error);
       }
@@ -51,7 +51,6 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
       setNamesStartedAt(performance.now());
       setNamesOwner('intro');
     }
-    if (t >= ENVELOPE_END_SECONDS) startMusic();
     const d = e.currentTarget.duration;
     if (!showScrollHint && d && d - t <= SCROLL_HINT_LEAD_SECONDS) setShowScrollHint(true);
   };
@@ -180,6 +179,7 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
           src="/intro-full.mp4#t=0.001"
           poster="/intro-envelope-poster.jpg"
           preload="auto"
+          muted
           playsInline
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleVideoEnded}
