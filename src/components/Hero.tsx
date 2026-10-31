@@ -35,7 +35,7 @@ function useIsTouchDevice() {
 
 export const ScrollHint: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     <motion.div
-      className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer z-30"
+      className="absolute bottom-24 sm:bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer z-30"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.8 }}

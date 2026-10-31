@@ -9,7 +9,7 @@ const ENVELOPE_END_SECONDS = 7.5;
 // The gold names start appearing at this point in the intro video
 const NAMES_START_SECONDS = 7;
 // Show the scroll down hint this many seconds before the intro video ends
-const SCROLL_HINT_LEAD_SECONDS = 2;
+const SCROLL_HINT_LEAD_SECONDS = 5;
 
 interface VideoIntroProps {
   onComplete: () => void;
