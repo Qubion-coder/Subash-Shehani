@@ -40,7 +40,7 @@ export default function App() {
     const videoLink = document.createElement('link');
     videoLink.rel = 'preload';
     videoLink.as = 'video';
-    videoLink.href = '/intro-envelope.mp4';
+    videoLink.href = '/intro-full.mp4';
     document.head.appendChild(videoLink);
 
     return () => {

@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CoupleNames, NAMES_ANIMATION_MS } from './CoupleNames';
 import { setNamesOwner } from '../utils/namesHandoff';
+import { ScrollHint } from './Hero';
 
-// Start the gold names this many seconds before the intro video ends
-const NAMES_LEAD_SECONDS = 2;
+// The intro is the envelope opening followed by the butterflies, in one video.
+// The envelope part ends here; the music starts from this point.
+const ENVELOPE_END_SECONDS = 7.5;
+// The gold names start appearing at this point in the intro video
+const NAMES_START_SECONDS = 7;
+// Show the scroll down hint this many seconds before the intro video ends
+const SCROLL_HINT_LEAD_SECONDS = 2;
 
 interface VideoIntroProps {
   onComplete: () => void;
@@ -30,21 +36,30 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
 
   const [ended, setEnded] = useState(false);
   const [namesStartedAt, setNamesStartedAt] = useState<number | null>(null);
+  const musicStartedRef = useRef(false);
+  const [showScrollHint, setShowScrollHint] = useState(false);
+
+  const startMusic = () => {
+    if (musicStartedRef.current) return;
+    musicStartedRef.current = true;
+    onMusicStart?.();
+  };
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const v = e.currentTarget;
-    if (namesStartedAt === null && !ended && v.duration && v.duration - v.currentTime <= NAMES_LEAD_SECONDS) {
+    const t = e.currentTarget.currentTime;
+    if (namesStartedAt === null && !ended && t >= NAMES_START_SECONDS) {
       setNamesStartedAt(performance.now());
       setNamesOwner('intro');
     }
+    if (t >= ENVELOPE_END_SECONDS) startMusic();
+    const d = e.currentTarget.duration;
+    if (!showScrollHint && d && d - t <= SCROLL_HINT_LEAD_SECONDS) setShowScrollHint(true);
   };
 
   const handleVideoEnded = () => {
     if (ended) return;
     setEnded(true);
-    if (onMusicStart) {
-      onMusicStart();
-    }
+    startMusic();
     // Mount the invitation underneath while the last intro frame stays on screen
     onComplete();
   };
@@ -162,7 +177,7 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
         <video 
           ref={videoRef}
           className="intro-video"
-          src="/intro-envelope.mp4#t=0.001"
+          src="/intro-full.mp4#t=0.001"
           poster="/intro-envelope-poster.jpg"
           preload="auto"
           playsInline
@@ -174,6 +189,17 @@ export function VideoIntro({ onComplete, onExited, onMusicStart, readyToTransiti
           // Same box as the hero (top of a full-height screen) so the handoff lines up exactly
           <div className="absolute top-0 inset-x-0 h-screen flex items-center justify-center pointer-events-none z-[5]">
             <CoupleNames delay={-0.4} />
+          </div>
+        )}
+
+        {showScrollHint && (
+          <div className="absolute top-0 inset-x-0 h-screen pointer-events-none z-[6] [&>*]:pointer-events-auto">
+            <ScrollHint
+              onClick={() => {
+                handleVideoEnded();
+                setTimeout(() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' }), 900);
+              }}
+            />
           </div>
         )}
         

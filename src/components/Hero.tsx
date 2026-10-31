@@ -33,6 +33,28 @@ function useIsTouchDevice() {
   return touch;
 }
 
+export const ScrollHint: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+    <motion.div
+      className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer z-30"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5, duration: 0.8 }}
+      onClick={onClick}
+    >
+      <div className="flex flex-col items-center gap-2 bg-black/20 hover:bg-black/40 transition-colors backdrop-blur-md px-6 py-4 rounded-full border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+        <span className="text-[10px] font-sans uppercase tracking-[0.4em] text-white font-medium pl-1">
+          Scroll Down
+        </span>
+        <motion.div 
+          animate={{ y: [0, 5, 0] }} 
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-5 h-5 text-white" />
+        </motion.div>
+      </div>
+    </motion.div>
+);
+
 export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const reducedMotion = usePrefersReducedMotion();
@@ -44,8 +66,9 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
   const scale = useTransform(scrollY, [0, 800], [1, 1.1]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-  const [videoEnded, setVideoEnded] = useState(false);
   const namesOwner = useNamesOwner();
+  // When the intro already showed the frame and scroll hint, keep them up from the start
+  const [videoEnded, setVideoEnded] = useState(namesOwner !== 'idle');
 
   return (
     <div ref={containerRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blush/30">
@@ -76,7 +99,7 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
 
 
 
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {videoEnded && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -90,27 +113,9 @@ export const Hero: React.FC<HeroProps> = ({ event = 'both', inviteeName }) => {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {videoEnded && (
-          <motion.div
-            className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer z-30"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
-          >
-            <div className="flex flex-col items-center gap-2 bg-black/20 hover:bg-black/40 transition-colors backdrop-blur-md px-6 py-4 rounded-full border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-              <span className="text-[10px] font-sans uppercase tracking-[0.4em] text-white font-medium pl-1">
-                Scroll Down
-              </span>
-              <motion.div 
-                animate={{ y: [0, 5, 0] }} 
-                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-              >
-                <ChevronDown className="w-5 h-5 text-white" />
-              </motion.div>
-            </div>
-          </motion.div>
+          <ScrollHint onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })} />
         )}
       </AnimatePresence>
     </div>
