@@ -7,7 +7,8 @@ interface CeremonyDetailsProps {
 }
 
 export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both' }) => {
-  const isHomecoming = event === 'homecoming';
+  const showChurch = event !== 'reception';
+  const showReception = event !== 'church';
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
@@ -68,6 +69,7 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
               </div>
 
               {/* Church Ceremony */}
+              {showChurch && (
               <div className="relative group">
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-lavender/40 shadow-lg flex items-center justify-center group-hover:border-brand-plum group-hover:shadow-[0_4px_15px_rgba(138,106,156,0.3)] transition-all duration-500">
                   <Clock className="w-5 h-5 text-brand-plum group-hover:scale-110 transition-transform duration-500" />
@@ -87,7 +89,10 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
                 </div>
               </div>
 
+              )}
+
               {/* Reception */}
+              {showReception && (
               <div className="relative group">
                 <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-lavender/40 shadow-lg flex items-center justify-center group-hover:border-brand-plum group-hover:shadow-[0_4px_15px_rgba(138,106,156,0.3)] transition-all duration-500">
                   <Clock className="w-5 h-5 text-brand-plum group-hover:scale-110 transition-transform duration-500" />
@@ -106,6 +111,7 @@ export const CeremonyDetails: React.FC<CeremonyDetailsProps> = ({ event = 'both'
                   </div>
                 </div>
               </div>
+              )}
 
 
             </div>

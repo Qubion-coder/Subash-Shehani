@@ -20,7 +20,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
     thoughts: '',
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const scriptUrl = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL as string;
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbwhNw3eZjJYxHHvJQkOdB9EvBvhP8YjdB8NAsOY2qA-ax7FxDEf1AFEOqG8ZU6eNoDY4g/exec";
 
   useEffect(() => {
     if (inviteeName) {
@@ -40,6 +40,7 @@ export const RSVPForm: React.FC<RSVPFormProps> = ({ inviteeName = '', eventName 
       payload.append('attendance', formData.attendance);
       payload.append('guests', formData.attendance === 'yes' ? formData.guests : '0'); 
       payload.append('thoughts', formData.thoughts);
+      payload.append('event', eventParam);
       payload.append('dietaryNotes', formData.thoughts); // Fallback for old sheet column
 
       await fetch(scriptUrl, {

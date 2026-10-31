@@ -1,35 +1,38 @@
-const SPREADSHEET_ID = '1IYsTHUnfOIHGcwQvoTcjOc5X2wKZJDIrqxqxXtpVpZY';
+// Subash & Shehani wedding - RSVP endpoint
+// Sheet: https://docs.google.com/spreadsheets/d/1R89bXTw_AbdOnS6H0iNVhejYW-IdBFYqp2X6wACJoZ8/edit
+const SPREADSHEET_ID = '1R89bXTw_AbdOnS6H0iNVhejYW-IdBFYqp2X6wACJoZ8';
+
+const RSVP_HEADERS = ['Timestamp', 'Guest Name', 'Attending', 'Guests', 'Invited To', 'Message'];
+
+const EVENT_LABELS = {
+  both: 'Church Mass & Reception',
+  church: 'Church Mass only',
+  reception: 'Reception only',
+};
 
 function doPost(e) {
+  // Stop two replies arriving at once from overwriting the same row
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+
   try {
     const payload = parsePayload_(e);
-    const sheetKey = String(payload.sheet || '').toUpperCase();
-
-    if (sheetKey !== 'RSVP' && sheetKey !== 'WISH') {
-      return jsonResponse_({ ok: false, error: 'Invalid sheet. Use RSVP or WISH.' });
+    if (!String(payload.fullName || '').trim()) {
+      return jsonResponse_({ ok: false, error: 'Missing guest name.' });
     }
 
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheet = getOrCreateSheet_(ss, sheetKey);
+    const sheet = getOrCreateSheet_(ss, 'RSVP', RSVP_HEADERS);
+    const attending = String(payload.attendance || '').toLowerCase() === 'yes';
 
-    if (sheetKey === 'RSVP') {
-      ensureHeaders_(sheet, ['Timestamp', 'Full Name', 'Guests', 'Event', 'Dietary Notes']);
-      sheet.appendRow([
-        new Date(),
-        payload.fullName || '',
-        payload.guests || '',
-        payload.event || '',
-        payload.dietaryNotes || '',
-      ]);
-    } else {
-      ensureHeaders_(sheet, ['Timestamp', 'Name', 'Event', 'Message']);
-      sheet.appendRow([
-        new Date(),
-        payload.name || '',
-        payload.event || '',
-        payload.message || '',
-      ]);
-    }
+    sheet.appendRow([
+      new Date(),
+      clean_(payload.fullName),
+      attending ? 'Yes' : 'No',
+      attending ? Number(payload.guests) || 1 : 0,
+      EVENT_LABELS[payload.event] || EVENT_LABELS.both,
+      clean_(payload.thoughts || payload.dietaryNotes),
+    ]);
 
     return jsonResponse_({ ok: true });
   } catch (error) {
@@ -37,14 +40,22 @@ function doPost(e) {
       ok: false,
       error: String(error && error.message ? error.message : error),
     });
+  } finally {
+    lock.releaseLock();
   }
 }
 
 function doGet() {
   return jsonResponse_({
     ok: true,
-    message: 'Wedding form endpoint is running.',
+    message: 'Subash & Shehani RSVP endpoint is running.',
   });
+}
+
+// Run this once from the editor to create the sheet tab and headers and grant access
+function setup() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  getOrCreateSheet_(ss, 'RSVP', RSVP_HEADERS);
 }
 
 function parsePayload_(e) {
@@ -90,18 +101,23 @@ function parseQueryString_(query) {
   return out;
 }
 
-function getOrCreateSheet_(ss, name) {
+function getOrCreateSheet_(ss, name, headers) {
   let sheet = ss.getSheetByName(name);
   if (!sheet) {
     sheet = ss.insertSheet(name);
   }
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#e7c3cb');
+    sheet.setFrozenRows(1);
+  }
   return sheet;
 }
 
-function ensureHeaders_(sheet, headers) {
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(headers);
-  }
+// Trim text and stop it being read as a spreadsheet formula
+function clean_(value) {
+  const text = String(value || '').trim().slice(0, 1000);
+  return /^[=+\-@]/.test(text) ? "'" + text : text;
 }
 
 function jsonResponse_(data) {

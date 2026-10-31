@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 interface InviteeBannerProps {
   inviteeName: string;
@@ -9,38 +9,44 @@ interface InviteeBannerProps {
 
 export const InviteeBanner: React.FC<InviteeBannerProps> = ({ inviteeName, eventLabel }) => {
   return (
-    <div className="w-full bg-gradient-to-r from-brand-rose/40 via-brand-rose/80 to-brand-rose/40 border-y border-brand-lavender/30 py-12 px-6 relative overflow-hidden shadow-sm">
-      {/* Decorative background glows */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/40 rounded-full blur-3xl pointer-events-none" />
+    <div
+      className="py-20 sm:py-24 bg-brand-blush bg-cover bg-center relative overflow-hidden"
+      style={{ backgroundImage: "url('/bg/lilac-leaves-bg.jpeg')" }}
+    >
+      <div className="absolute inset-0 bg-white/60 pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
+      <div className="max-w-2xl mx-auto px-6 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center"
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className="bg-white/80 backdrop-blur-md rounded-[2.5rem] border border-white shadow-[0_30px_60px_rgba(138,106,156,0.15)] px-6 py-12 sm:px-14 sm:py-14 text-center relative overflow-hidden"
         >
-          <div className="inline-flex items-center gap-3 mb-4">
-            <Sparkles className="w-4 h-4 text-brand-plum animate-pulse" />
-            <span className="text-brand-plum uppercase tracking-[0.4em] sm:tracking-[0.5em] text-[10px] sm:text-xs font-bold drop-shadow-sm">
-              Specially Invited Guest
-            </span>
-            <Sparkles className="w-4 h-4 text-brand-plum animate-pulse" />
-          </div>
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-rose via-brand-plum/80 to-brand-rose" />
 
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-['Great_Vibes',_cursive] text-stone-800 mb-4 drop-shadow-sm font-normal py-2 leading-relaxed">
+          <span className="text-brand-plum uppercase tracking-[0.4em] sm:tracking-[0.5em] text-[11px] sm:text-xs font-bold drop-shadow-sm">
+            Specially Invited Guest
+          </span>
+
+          <div className="w-12 h-[1px] bg-brand-lavender/60 mx-auto my-6" />
+
+          <h2 className="font-display text-[2.6rem] sm:text-6xl text-stone-800 drop-shadow-sm leading-[1.3] py-1 break-words">
             {inviteeName}
           </h2>
 
-          <div className="flex items-center gap-4 justify-center max-w-xl mx-auto">
-            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-brand-plum/40" />
-            <p className="text-stone-600 font-serif italic text-lg sm:text-xl">
-              We joyfully invite you to celebrate <span className="text-brand-plum font-semibold">{eventLabel}</span> with us.
-            </p>
-            <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-brand-plum/40" />
+          <p className="mt-5 text-stone-700 font-serif text-lg sm:text-xl leading-relaxed">
+            We cordially invite <span className="italic text-brand-plum">{inviteeName}</span> to celebrate our special day with us.
+          </p>
+
+          <div className="flex items-center justify-center gap-3 mt-8">
+            <div className="hidden sm:block h-[1px] w-10 bg-gradient-to-r from-transparent to-brand-plum/40" />
+            <span className="px-5 py-2 rounded-full border border-brand-lavender/50 bg-brand-blush/80 text-brand-plum uppercase whitespace-nowrap tracking-[0.2em] sm:tracking-[0.3em] text-[10px] sm:text-[11px] font-bold">
+              {eventLabel}
+            </span>
+            <div className="hidden sm:block h-[1px] w-10 bg-gradient-to-l from-transparent to-brand-plum/40" />
           </div>
 
-          <Heart className="w-5 h-5 text-brand-plum mt-6 fill-brand-lavender/20 animate-pulse" />
+          <Heart className="w-5 h-5 mx-auto mt-8 text-brand-plum fill-brand-lavender/30" />
         </motion.div>
       </div>
     </div>

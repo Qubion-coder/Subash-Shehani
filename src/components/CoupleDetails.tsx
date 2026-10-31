@@ -39,7 +39,7 @@ export const CoupleDetails: React.FC = () => {
             <span className="text-[#8A6A9C] uppercase tracking-[0.4em] text-[10px] font-bold mb-3 block">The Groom</span>
             <h3 className="text-4xl sm:text-5xl font-['Cormorant_Garamond',_serif] text-stone-800 mb-2 drop-shadow-sm">Subash</h3>
             <p className="text-stone-700 font-century text-xs mb-2"></p>
-            <p className="text-stone-800 font-serif italic font-semibold text-base sm:text-lg">Son of Mr. & Mrs. W.A. Siriwardhana</p>
+            <p className="text-stone-800 font-serif italic font-semibold text-base sm:text-lg">Son of Mr & Mrs Walebode</p>
           </div>
           <div className="hidden lg:flex justify-end mt-8 relative z-10">
             <Heart className="w-6 h-6 text-brand-lavender/60 fill-brand-lavender/20 transform hover:scale-110 transition-transform cursor-pointer" />
@@ -58,7 +58,7 @@ export const CoupleDetails: React.FC = () => {
             <span className="text-[#8A6A9C] uppercase tracking-[0.4em] text-[10px] font-bold mb-3 block">The Bride</span>
             <h3 className="text-4xl sm:text-5xl font-['Cormorant_Garamond',_serif] text-stone-800 mb-2 drop-shadow-sm">Shehani</h3>
             <p className="text-stone-700 font-century text-xs mb-2"></p>
-            <p className="text-stone-800 font-serif italic font-semibold text-base sm:text-lg">Daughter of Mr. & Mrs. H.A.P. Perera</p>
+            <p className="text-stone-800 font-serif italic font-semibold text-base sm:text-lg">Daughter of Mr & Mrs Athula Perera</p>
           </div>
           <div className="hidden lg:flex justify-start mt-8">
             <Heart className="w-6 h-6 text-brand-lavender/60 fill-brand-lavender/20 transform hover:scale-110 transition-transform cursor-pointer" />

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Copy, Check, ExternalLink, Sparkles, User, Calendar, Link as LinkIcon, Trash2, ArrowLeft } from 'lucide-react';
+import { Copy, Check, Sparkles, User, Calendar, Users, Link as LinkIcon, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import { EVENT_OPTIONS, GUEST_PREFIXES, GuestEvent, buildInviteUrl, guestDisplayName, invitationMessage } from '../utils/guest';
 
 export const Admin: React.FC = () => {
-  const [guestTitle, setGuestTitle] = useState('Mr.');
+  const [guestTitle, setGuestTitle] = useState<string>('Mr.');
   const [guestName, setGuestName] = useState('');
+  const [guestEvent, setGuestEvent] = useState<GuestEvent>('both');
   const [guestCount, setGuestCount] = useState('1');
-  const [generatedUrl, setGeneratedUrl] = useState('');
+  // Snapshot taken on Generate, so editing the form afterwards doesn't change what gets copied
+  const [generated, setGenerated] = useState<{ url: string; displayName: string } | null>(null);
   const [copied, setCopied] = useState(false);
 
   const handleGenerate = (e: React.FormEvent) => {
@@ -17,51 +20,30 @@ export const Admin: React.FC = () => {
       return;
     }
 
-    // Build URL with params
-    const baseUrl = window.location.origin;
-    const params = new URLSearchParams();
-    if (guestTitle) params.append('title', guestTitle);
-    params.append('name', guestName.trim());
-    if (guestCount) params.append('guests', guestCount);
-
-    const fullUrl = `${baseUrl}/?${params.toString()}`;
-    setGeneratedUrl(fullUrl);
+    const url = buildInviteUrl(window.location.origin, guestTitle, guestName, guestEvent, guestCount);
+    setGenerated({ url, displayName: guestDisplayName(guestTitle, guestName) });
     setCopied(false);
-    toast.success('Invitation link generated successfully!');
+    toast.success('Invitation link generated!');
   };
 
-  const handleCopy = (url: string) => {
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      toast.success('Link copied to clipboard!');
-      setTimeout(() => setCopied(false), 3000);
+  const copyText = (text: string, success: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success(success);
     }).catch(() => {
-      toast.error('Failed to copy link. Please select and copy manually.');
+      toast.error('Failed to copy. Please select and copy manually.');
     });
   };
 
-  const generateFullMessage = (url: string, title: string, name: string) => {
-    return `Dear ${title ? title + ' ' : ''}${name} ❤️
-
-With joyful hearts, we warmly invite you to celebrate one of the most special days of our lives as we begin our journey together.
-
-Please view our wedding invitation and all the event details through the link below 🌐:
-
-${url}
-
-Your presence would truly mean the world to us, and we would be honored to celebrate this beautiful moment together.
-
-With love,
-❤️ Subash & Shehani`;
+  const handleCopyLink = () => {
+    if (!generated) return;
+    copyText(generated.url, 'Link copied!');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
   };
 
-  const handleCopyMessageActive = () => {
-    const msg = generateFullMessage(generatedUrl, guestTitle, guestName);
-    navigator.clipboard.writeText(msg).then(() => {
-      toast.success('Full message copied to clipboard!');
-    }).catch(() => {
-      toast.error('Failed to copy message.');
-    });
+  const handleCopyMessage = () => {
+    if (!generated) return;
+    copyText(invitationMessage(generated.displayName, generated.url), 'Message copied!');
   };
 
   return (
@@ -69,7 +51,7 @@ With love,
       {/* Background Orbs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-radial from-brand-lavender/20 to-transparent blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto [font-variant-numeric:lining-nums]">
         {/* Back to main website button */}
         <div className="mb-8 flex justify-between items-center">
           <a 
@@ -115,20 +97,16 @@ With love,
                 <div>
                   <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 flex items-center gap-2 ml-1">
                     <User className="w-4 h-4 text-brand-plum" />
-                    Guest Title
+                    Select Prefix
                   </label>
                   <select
                     value={guestTitle}
                     onChange={(e) => setGuestTitle(e.target.value)}
                     className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-lavender/30 focus:border-brand-plum/40 outline-none transition-all font-serif text-lg shadow-inner text-stone-800 cursor-pointer"
                   >
-                    <option value="">No Prefix</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Miss">Miss</option>
-                    <option value="Mr. & Mrs.">Mr. & Mrs.</option>
-                    <option value="Family">Family</option>
-                    <option value="Dear">Dear</option>
+                    {GUEST_PREFIXES.map((p) => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -149,7 +127,23 @@ With love,
 
                 <div>
                   <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 flex items-center gap-2 ml-1">
-                    <User className="w-4 h-4 text-brand-plum" />
+                    <Calendar className="w-4 h-4 text-brand-plum" />
+                    Invited To
+                  </label>
+                  <select
+                    value={guestEvent}
+                    onChange={(e) => setGuestEvent(e.target.value as GuestEvent)}
+                    className="w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-lavender/30 focus:border-brand-plum/40 outline-none transition-all font-serif text-lg shadow-inner text-stone-800 cursor-pointer"
+                  >
+                    {EVENT_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 flex items-center gap-2 ml-1">
+                    <Users className="w-4 h-4 text-brand-plum" />
                     Guest Count
                   </label>
                   <input
@@ -170,8 +164,8 @@ With love,
                 type="submit"
                 className="w-full bg-brand-plum text-white py-5 rounded-full font-sans tracking-[0.3em] font-bold text-xs uppercase hover:bg-[#765889] transition-all shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3"
               >
-                <LinkIcon className="w-4 h-4 text-brand-plum" />
-                Generate Invitation Link
+                <LinkIcon className="w-4 h-4 text-white" />
+                Generate Link
               </button>
             </form>
           </motion.div>
@@ -190,41 +184,51 @@ With love,
                 Generated Link
               </h3>
               
-              {generatedUrl ? (
+              {generated ? (
                 <div className="space-y-6 animate-fadeIn">
+                  <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/80 shadow-inner">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-brand-plum mb-2">Invitation Link</p>
+                    <a href={generated.url} target="_blank" rel="noreferrer" className="block text-sm text-stone-800 font-mono break-all hover:text-brand-plum">
+                      {generated.url}
+                    </a>
+                  </div>
+
                   <div className="p-5 bg-stone-50 rounded-2xl border border-stone-200/80 shadow-inner">
                     <p className="text-[10px] font-bold uppercase tracking-widest text-brand-plum mb-3 flex items-center gap-2">
                       <Sparkles className="w-3 h-3" /> WhatsApp Message Preview
                     </p>
-                    <div className="text-sm text-stone-700 font-serif whitespace-pre-wrap leading-relaxed bg-white/60 p-4 rounded-xl border border-stone-100">
-                      {generateFullMessage(generatedUrl, guestTitle, guestName)}
+                    <p className="font-serif text-lg text-stone-800 mb-3">Dear {generated.displayName} ❤️</p>
+                    <div className="text-sm text-stone-700 font-serif whitespace-pre-wrap leading-relaxed bg-white/60 p-4 rounded-xl border border-stone-100 max-h-64 overflow-y-auto">
+                      {invitationMessage(generated.displayName, generated.url)}
                     </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button
-                      onClick={() => handleCopy(generatedUrl)}
-                      className="flex-1 bg-brand-plum text-white py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-plum/90 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95"
-                    >
-                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copied ? 'Copied!' : 'Copy Link Only'}
-                    </button>
-                    <button
-                      onClick={handleCopyMessageActive}
-                      className="flex-1 bg-brand-rose text-brand-plum py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-rose/90 transition-all shadow-sm border border-brand-lavender/30 flex items-center justify-center gap-2 active:scale-95"
-                    >
-                      <Copy className="w-4 h-4" />
-                      Copy Full Message
-                    </button>
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-12 border-2 border-dashed border-stone-200 rounded-2xl">
                   <p className="text-stone-400 font-serif italic text-base">
-                    Fill the form and click generate to create a link.
+                    Fill the form and click Generate Link.
                   </p>
                 </div>
               )}
+
+              <div className="flex flex-col gap-3 mt-6">
+                <button
+                  onClick={handleCopyLink}
+                  disabled={!generated}
+                  className="flex-1 bg-brand-plum text-white py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-plum/90 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+                >
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {copied ? 'Copied!' : 'Copy Link Only'}
+                </button>
+                <button
+                  onClick={handleCopyMessage}
+                  disabled={!generated}
+                  className="flex-1 bg-brand-rose text-brand-plum py-3.5 px-6 rounded-full font-sans tracking-[0.2em] font-bold text-[11px] uppercase hover:bg-brand-rose/90 transition-all shadow-sm border border-brand-lavender/30 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+                >
+                  <Copy className="w-4 h-4" />
+                  Copy Full Message
+                </button>
+              </div>
             </div>
 
 

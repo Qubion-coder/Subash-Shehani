@@ -30,7 +30,7 @@ export const Location: React.FC<LocationProps> = ({ event = 'both' }) => {
       heading: "Our Beginning,",
       headingAccent: "Our Forever"
     }
-  ];
+  ].filter((v) => (event === 'church' ? v.id === 'ceremony' : event === 'reception' ? v.id === 'reception' : true));
 
   return (
     <div className="max-w-[85rem] mx-auto px-6 relative pt-12 pb-0 lg:py-12">
