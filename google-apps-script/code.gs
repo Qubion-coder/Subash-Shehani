@@ -1,7 +1,6 @@
 // Subash & Shehani wedding - RSVP endpoint
-// Sheet: https://docs.google.com/spreadsheets/d/1z56gBqQwD99L3iGHt2nw7eaQ9mj79tzHVbfbtgwxffY/edit
-// Replies are saved straight into the first tab of this spreadsheet (no separate tab)
-const SPREADSHEET_ID = '1z56gBqQwD99L3iGHt2nw7eaQ9mj79tzHVbfbtgwxffY';
+// Sheet: https://docs.google.com/spreadsheets/d/1R89bXTw_AbdOnS6H0iNVhejYW-IdBFYqp2X6wACJoZ8/edit
+const SPREADSHEET_ID = '1R89bXTw_AbdOnS6H0iNVhejYW-IdBFYqp2X6wACJoZ8';
 
 const RSVP_HEADERS = ['Timestamp', 'Guest Name', 'Attending', 'Guests', 'Invited To', 'Message'];
 
@@ -22,7 +21,8 @@ function doPost(e) {
       return jsonResponse_({ ok: false, error: 'Missing guest name.' });
     }
 
-    const sheet = getSheet_();
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = getOrCreateSheet_(ss, 'RSVP', RSVP_HEADERS);
     const attending = String(payload.attendance || '').toLowerCase() === 'yes';
 
     sheet.appendRow([
@@ -52,9 +52,10 @@ function doGet() {
   });
 }
 
-// Run this once from the editor to add the headers and grant access
+// Run this once from the editor to create the sheet tab and headers and grant access
 function setup() {
-  getSheet_();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  getOrCreateSheet_(ss, 'RSVP', RSVP_HEADERS);
 }
 
 function parsePayload_(e) {
@@ -100,12 +101,14 @@ function parseQueryString_(query) {
   return out;
 }
 
-// First tab of the spreadsheet, with a header row added if it is empty
-function getSheet_() {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheets()[0];
+function getOrCreateSheet_(ss, name, headers) {
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+  }
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(RSVP_HEADERS);
-    sheet.getRange(1, 1, 1, RSVP_HEADERS.length).setFontWeight('bold').setBackground('#e7c3cb');
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#e7c3cb');
     sheet.setFrozenRows(1);
   }
   return sheet;
