@@ -4,8 +4,12 @@ import { Copy, Check, Sparkles, User, Calendar, Users, Link as LinkIcon, ArrowLe
 import { toast } from 'sonner';
 import { EVENT_OPTIONS, GUEST_PREFIXES, GuestEvent, buildInviteUrl, guestDisplayName, invitationMessage } from '../utils/guest';
 
+// Select value that shows a text box for typing any other prefix
+const CUSTOM_PREFIX = '__custom__';
+
 export const Admin: React.FC = () => {
   const [guestTitle, setGuestTitle] = useState<string>('Mr.');
+  const [customPrefix, setCustomPrefix] = useState('');
   const [guestName, setGuestName] = useState('');
   const [guestEvent, setGuestEvent] = useState<GuestEvent>('both');
   const [guestCount, setGuestCount] = useState('1');
@@ -20,8 +24,9 @@ export const Admin: React.FC = () => {
       return;
     }
 
-    const url = buildInviteUrl(window.location.origin, guestTitle, guestName, guestEvent, guestCount);
-    setGenerated({ url, displayName: guestDisplayName(guestTitle, guestName) });
+    const prefix = guestTitle === CUSTOM_PREFIX ? customPrefix.trim().replace(/\s+/g, ' ') : guestTitle;
+    const url = buildInviteUrl(window.location.origin, prefix, guestName, guestEvent, guestCount);
+    setGenerated({ url, displayName: guestDisplayName(prefix, guestName) });
     setCopied(false);
     toast.success('Invitation link generated!');
   };
@@ -107,7 +112,17 @@ export const Admin: React.FC = () => {
                     {GUEST_PREFIXES.map((p) => (
                       <option key={p} value={p}>{p}</option>
                     ))}
+                    <option value={CUSTOM_PREFIX}>Other (type your own)</option>
                   </select>
+                  {guestTitle === CUSTOM_PREFIX && (
+                    <input
+                      type="text"
+                      placeholder="Type prefix, e.g. Dr. or Hon."
+                      value={customPrefix}
+                      onChange={(e) => setCustomPrefix(e.target.value)}
+                      className="mt-3 w-full bg-white px-6 py-4 rounded-full border border-stone-200/80 focus:ring-2 focus:ring-brand-lavender/30 focus:border-brand-plum/40 outline-none transition-all font-serif text-lg shadow-inner text-stone-800 placeholder:text-stone-400"
+                    />
+                  )}
                 </div>
 
                 <div>

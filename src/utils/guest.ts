@@ -2,7 +2,7 @@
 
 export const COUPLE = { groom: 'Subash', bride: 'Shehani' };
 
-export const GUEST_PREFIXES = ['Mr.', 'Mrs.', 'Miss', 'Mr. & Mrs.', 'Family', 'Dear'] as const;
+export const GUEST_PREFIXES = ['Mr.', 'Mrs.', 'Miss', 'Mr. & Mrs.', 'Rev. Fr.', 'Family', 'Dear'] as const;
 
 export type GuestEvent = 'both' | 'church' | 'reception';
 
